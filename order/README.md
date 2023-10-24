@@ -1,4 +1,4 @@
-sudo docker run -p 3306:3306	\
+sudo docker run -d -p 3306:3306	\
 	-e MYSQL_ROOT_PASSWORD=abc123456 \
 	-e MYSQL_DATABASE=order mysql
 
