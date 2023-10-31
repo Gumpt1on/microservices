@@ -8,10 +8,8 @@ import (
 	"github.com/Gumpt1on/microservices/payment/internal/adapters/grpc"
 	"github.com/Gumpt1on/microservices/payment/internal/application/core/api"
 	log "github.com/sirupsen/logrus"
-	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/jaeger"
-	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	tracesdk "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.10.0"
@@ -68,13 +66,13 @@ func (l customLogger) Format(entry *log.Entry) ([]byte, error) {
 }
 
 func main() {
-	tp, err := tracerProvider("http://jaeger-otel.jaeger.svc.cluster.local:14278/api/traces")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}))
+	//tp, err := tracerProvider("http://jaeger-otel.jaeger.svc.cluster.local:14278/api/traces")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	//
+	//otel.SetTracerProvider(tp)
+	//otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}))
 
 	dbAdapter, err := db.NewAdapter(config.GetDataSourceURL())
 	if err != nil {
