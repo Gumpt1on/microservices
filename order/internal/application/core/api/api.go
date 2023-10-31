@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"strings"
 
 	"github.com/Gumpt1on/microservices/order/internal/application/core/domain"
 	"github.com/Gumpt1on/microservices/order/internal/ports"
@@ -30,11 +31,20 @@ func (a Application) PlaceOrder(ctx context.Context, order domain.Order) (domain
 
 	paymentErr := a.payment.Charge(&order)
 	if paymentErr != nil {
-		// return domain.Order{}, paymentErr
-		st, _ := status.FromError(paymentErr)
+		st := status.Convert(paymentErr)	// Converts a complex error to a status
+		var allErrors []string
+		for _, detail := range st.Details() {
+			switch t := detail.(type) {
+			case *errdetails.BadRequest:
+				for _, violation := range t.GetFieldViolations() {
+					allErrors = append(allErrors, violation.Description)
+				}
+			}
+		}
+
 		fieldErr := &errdetails.BadRequest_FieldViolation{
 			Field:       "payment",
-			Description: st.Message(),
+			Description: strings.Join(allErrors, "\n"),
 		}
 
 		badReq := &errdetails.BadRequest{}
