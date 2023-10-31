@@ -16,3 +16,22 @@ grpcurl -d \
 '{"order_id": 1}' \
 -plaintext localhost:3000 \
 Order/Get
+
+
+## test grpc status
+```
+grpcurl -d '{"user_id": 123, "order_items": [{"product_code": "sku1", "unit_price": 0.12, "quantity": 1}]}' -plaintext localhost:3000 Order/Create
+ERROR:
+  Code: InvalidArgument
+  Message: order creating failed
+  Details:
+  1)    {
+          "@type": "type.googleapis.com/google.rpc.BadRequest",
+          "fieldViolations": [
+            {
+              "field": "payment",
+              "description": "grpc: the client connection is closing"
+            }
+          ]
+        }
+```
