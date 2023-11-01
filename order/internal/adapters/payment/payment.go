@@ -2,7 +2,6 @@ package payment
 
 import (
 	"context"
-
 	"github.com/Gumpt1on/microservices-proto/golang/payment"
 	"github.com/Gumpt1on/microservices/order/internal/application/core/domain"
 	"google.golang.org/grpc"
@@ -20,7 +19,6 @@ func NewAdapter(paymentServiceUrl string) (*Adapter, error) {
 	if err != nil {
 		return nil, err
 	}
-	defer conn.Close()
 	client := payment.NewPaymentClient(conn)
 	return &Adapter{payment: client}, nil
 }
