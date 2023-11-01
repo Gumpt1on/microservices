@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Gumpt1on/microservices/order/internal/application/core/domain"
+	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -62,6 +63,7 @@ func (a Adapter) Save(ctx context.Context, order *domain.Order) error {
 		Status:     order.Status,
 		OrderItems: orderItems,
 	}
+	log.Infof("DB SAVE: %v", orderModel)
 	res := a.db.WithContext(ctx).Create(&orderModel)
 	if res.Error == nil {
 		order.ID = int64(orderModel.ID)
